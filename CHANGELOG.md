@@ -6,6 +6,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [7.1.31] - 2026-10-05 (NightWatcher314 build)
+### Fixed
+- Restore the wallpaper-manager, space-move and front-window scans on macOS 27.0. All three patterns uniquely match both Dock ARM64 slices on build 26A428; unverified 27.1 and 27.2 keep the existing disabled paths.
+- Use the target window owner's connection when obtaining the process serial number for the scripting addition's window-focus request. App activation remains the main program's responsibility.
+- Bump the scripting-addition version to 2.1.36 so an existing installation can detect the updated payload.
+
+### Validation
+- Universal build and code-signature verification; existing unit tests and the new macOS-version gating regression test.
+- On macOS 27.0 (26A428): payload handshake 0x7f, temporary desktop reorder round trip with the original desktop order restored, ordinary cross-app activation, and private same-app window-focus round trip using two disposable test windows.
+- Cross-display desktop movement and actual execution on arm64e.x1 hardware remain untested.
+
 ## [7.1.30] - 2026-09-29
 ### Fixed
 - **Mouse Handler Teardown Race & Crash Guard**:

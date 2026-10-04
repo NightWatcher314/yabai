@@ -22,7 +22,7 @@
 
 #define MAJOR  7
 #define MINOR  1
-#define PATCH 30
+#define PATCH 31
 
 struct signal *g_signal_event[SIGNAL_TYPE_COUNT];
 struct process_manager g_process_manager;
@@ -207,7 +207,7 @@ static void parse_arguments(int argc, char **argv)
                         "    --version, -v          Print version to stdout and exit.\n"
                         "    --help, -h             Print options to stdout and exit.\n"
                         "Type `man yabai` for more information, or visit: "
-                        "https://github.com/Christian-SC26/yabai/blob/v%d.%d.%d/doc/yabai.asciidoc\n", MAJOR, MINOR, PATCH);
+                        "https://github.com/NightWatcher314/yabai/blob/v%d.%d.%d/doc/yabai.asciidoc\n", MAJOR, MINOR, PATCH);
         exit(EXIT_SUCCESS);
     }
 

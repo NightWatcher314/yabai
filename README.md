@@ -1,3 +1,14 @@
+## NightWatcher314 builds
+
+Install this fork's self-built release through `brew install nightwatcher314/formula/yabai`.
+Our release binaries use ad-hoc signing; the Apple notarization statements below describe Christian-SC26's releases.
+
+v7.1.31 restores three scripting-addition interfaces on macOS 27.0, validated on build 26A428.
+The capability handshake is 0x7f, and desktop reordering and same-app window focus were exercised and restored.
+Ordinary cross-app activation uses the existing main-program path. macOS 27.1/27.2 keep the disabled patterns;
+cross-display desktop movement and execution on arm64e.x1 hardware still need live validation.
+See [the changelog](CHANGELOG.md) for validation and the tap README for installation, permissions and upgrades.
+
 <!-- Please be careful editing the below HTML, as GitHub is quite finicky with anything that looks like an HTML tag in GitHub Flavored Markdown. -->
 <p align="center">
   <img width="75%" src="assets/banner/banner.svg" alt="Banner">

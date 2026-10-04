@@ -1,6 +1,6 @@
-.PHONY: clean build run all
+.PHONY: clean build run all osax-patterns
 
-all: clean build run
+all: clean build run osax-patterns
 
 clean:
 	rm -rf ./bin
@@ -11,3 +11,8 @@ build:
 
 run:
 	./bin/tests
+
+osax-patterns:
+	mkdir -p ./bin
+	xcrun clang ./osax_macos27.m -framework Foundation -o ./bin/osax_macos27
+	./bin/osax_macos27
