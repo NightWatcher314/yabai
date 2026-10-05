@@ -1,7 +1,14 @@
 ## NightWatcher314 builds
 
 Install this fork's self-built release through `brew install nightwatcher314/formula/yabai`.
-Our release binaries use ad-hoc signing; the Apple notarization statements below describe Christian-SC26's releases.
+Starting with v7.1.32, our release binaries use a persistent self-signed Code Signing certificate.
+The private key stays in the publisher's local keychain; release assets contain only the signed executable.
+The Apple notarization statements below describe Christian-SC26's releases.
+
+For upgrades to retain Accessibility permission, keep the same certificate and signing identifier, and use
+`/opt/homebrew/opt/yabai/bin/yabai` for both launchd and the permission entry on Apple Silicon
+(`/usr/local/opt/yabai/bin/yabai` on Intel Homebrew). The first move to this identity still requires authorization.
+Build releases with `bash scripts/release.sh`; it pins the certificate fingerprint and refuses to fall back to ad-hoc signing.
 
 v7.1.31 restores three scripting-addition interfaces on macOS 27.0, validated on build 26A428.
 The capability handshake is 0x7f, and desktop reordering and same-app window focus were exercised and restored.

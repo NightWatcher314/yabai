@@ -4,27 +4,29 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-echo "==> 1. Building optimized release binary (make install)..."
-make install
-
-echo "==> 2. Signing with Developer ID Application and Hardened Runtime..."
-make sign
-
-VERSION=$(./bin/yabai --version)
-echo "==> Version: $VERSION"
-
-echo "==> 3. Creating release archive (make archive)..."
-make archive
-
-ARCHIVE="bin/${VERSION}.tar.gz"
-if [[ -f "$ARCHIVE" ]]; then
-    SHA=$(shasum -a 256 "$ARCHIVE" | awk '{print $1}')
-    echo "$SHA  $(basename "$ARCHIVE")" > "${ARCHIVE}.sha256"
-    echo "==> Archive created: $ARCHIVE"
-    echo "==> SHA-256: $SHA"
+# Public certificate fingerprint; its private key stays in the publisher's keychain.
+IDENTITY="E9E284C4A5B5337E77AEEBE7AE9B7A5B9C7BABC0"
+if ! security find-identity -v -p codesigning | awk -v identity="$IDENTITY" '$2 == identity { found=1 } END { exit !found }'; then
+    echo "The persistent yabai-cert signing identity is unavailable; restore it before publishing." >&2
+    exit 1
 fi
 
-echo "==> 4. Checking Apple Notary Service status..."
-xcrun notarytool history --keychain-profile "yabai-profile" 2>/dev/null || true
+make install
+REQUIREMENT="designated => identifier \"com.asmvik.yabai\" and certificate leaf = H\"$IDENTITY\""
+codesign --force --sign "$IDENTITY" --identifier com.asmvik.yabai \
+    --options runtime --timestamp=none --requirements "=$REQUIREMENT" bin/yabai
+codesign --verify --strict bin/yabai
 
-echo "==> Done! Ready for release distribution."
+VERSION="$(bin/yabai --version)"
+STAGING="$(mktemp -d "${TMPDIR:-/tmp}/yabai-release.XXXXXX")"
+trap 'rm -rf "$STAGING"' EXIT
+mkdir -p "$STAGING/archive/bin" "$STAGING/archive/doc" "$STAGING/archive/examples"
+cp bin/yabai "$STAGING/archive/bin/"
+cp doc/yabai.1 "$STAGING/archive/doc/"
+cp examples/yabairc examples/skhdrc "$STAGING/archive/examples/"
+cp LICENSE.txt "$STAGING/archive/"
+printf 'Source: %s\nSigning certificate SHA1: %s\nSigning: self-signed Code Signing, no Apple notarization\n' \
+    "$(git rev-parse HEAD)" "$IDENTITY" > "$STAGING/archive/BUILD.txt"
+tar -czf "bin/${VERSION}.tar.gz" -C "$STAGING" archive
+(cd bin && shasum -a 256 "${VERSION}.tar.gz" > "${VERSION}.tar.gz.sha256")
+echo "Created bin/${VERSION}.tar.gz with the persistent signing identity."

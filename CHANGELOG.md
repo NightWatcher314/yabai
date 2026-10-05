@@ -6,6 +6,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [7.1.32] - 2026-10-06 (NightWatcher314 build)
+### Changed
+- Sign release binaries with a persistent self-signed Code Signing identity and explicit designated requirement, replacing per-build ad-hoc identities.
+- Pin the release-signing certificate fingerprint; publishing fails if that identity is unavailable instead of silently changing the signer.
+- Document the fixed Homebrew opt path for launchd and Accessibility authorization. The private key remains in the publisher's keychain; this is not Apple Developer ID signing or notarization.
+
 ## [7.1.31] - 2026-10-05 (NightWatcher314 build)
 ### Fixed
 - Restore the wallpaper-manager, space-move and front-window scans on macOS 27.0. All three patterns uniquely match both Dock ARM64 slices on build 26A428; unverified 27.1 and 27.2 keep the existing disabled paths.
