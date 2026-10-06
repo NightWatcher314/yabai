@@ -6,8 +6,8 @@ The private key stays in the publisher's local keychain; release assets contain 
 The Apple notarization statements below describe Christian-SC26's releases.
 
 For upgrades to retain Accessibility permission, keep the same certificate and signing identifier, and use
-`/opt/homebrew/opt/yabai/bin/yabai` for both launchd and the permission entry on Apple Silicon
-(`/usr/local/opt/yabai/bin/yabai` on Intel Homebrew). The first move to this identity still requires authorization.
+`/opt/homebrew/var/yabai/yabai` for both launchd and the permission entry on Apple Silicon
+(`/usr/local/var/yabai/yabai` on Intel Homebrew). The formula installs a real executable at that stable path; bin/opt symlinks resolve to a versioned Cellar path. The first move to this identity still requires authorization.
 Build releases with `bash scripts/release.sh`; it pins the certificate fingerprint and refuses to fall back to ad-hoc signing.
 
 v7.1.31 restores three scripting-addition interfaces on macOS 27.0, validated on build 26A428.
